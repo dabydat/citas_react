@@ -11,7 +11,7 @@ function ListadoPacientes() {
           Pacientes y Citas
         </span>
       </p>
-      <div className='m-3 px-5 pt-5 pb-10 bg-white shadow-md rounded-xl md:h-5/6 overflow-y-scroll'>
+      <div className='mx-5 px-5 pt-5 pb-10 bg-white shadow-md rounded-xl md:h-screen md:overflow-y-scroll'>
         <Paciente />
         <Paciente />
         <Paciente />
