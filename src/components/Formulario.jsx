@@ -10,6 +10,8 @@ function Formulario() {
 
   const [error, setError] = useState({ nombreMascota: '', nombrePropietario: '', email: '', alta: '', sintomas: '' })
 
+  const [invalidForm, setInvalidForm] = useState(false);
+
   const FormGroup = {
     nombreMascota: { validations: { required: true, min: 5, max: 20 } },
     nombrePropietario: { validations: { required: true, min: 5, max: 50 } },
@@ -20,14 +22,12 @@ function Formulario() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Enviando');
-
     // Validación del Formulario
-    // if (customError(FormGroup)) {
-    //   setError(true);
-    // } else {
-    //   console.log('todos llenoss');
-    // }
+    if ([nombreMascota, nombrePropietario, email, alta, sintomas].includes('')) {
+      setInvalidForm(true);
+      return;
+    }
+    setInvalidForm(true);
   }
 
   return (
@@ -85,7 +85,7 @@ function Formulario() {
           <div className='text-red-600'>{error['sintomas']}</div>
         </div>
         <input type="submit"
-          className='bg-indigo-600 w-full p-3 mt-3 text-white uppercase font-bold hover:bg-indigo-800 cursor-pointer transition-all '
+          className='bg-indigo-600 w-full p-3 mt-3 text-white uppercase font-bold hover:bg-indigo-800 cursor-pointer transition-all'
           value="Agregar Paciente" />
       </form>
     </div>
