@@ -1,7 +1,9 @@
+import Error from "./Error";
 import { useState, useEffect } from 'react'
 import customError from '../helpers/errors'
+import generateId from "../utils/generateId";
 
-function Formulario() {
+function Formulario({ pacientes, setPacientes }) {
   const [nombreMascota, setNombreMascota] = useState('');
   const [nombrePropietario, setNombrePropietario] = useState('');
   const [email, setEmail] = useState('');
@@ -13,7 +15,7 @@ function Formulario() {
   const [invalidForm, setInvalidForm] = useState(false);
 
   const FormGroup = {
-    nombreMascota: { validations: { required: true, min: 5, max: 20 } },
+    nombreMascota: { validations: { required: true, min: 4, max: 20 } },
     nombrePropietario: { validations: { required: true, min: 5, max: 50 } },
     email: { validations: { required: true, regExp: 'email' } },
     alta: { validations: { typeValue: 'dateY' } },
@@ -22,22 +24,31 @@ function Formulario() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     // Validación del Formulario
     if ([nombreMascota, nombrePropietario, email, alta, sintomas].includes('')) {
       setInvalidForm(true);
       return;
     }
-    setInvalidForm(true);
+
+    setInvalidForm(false);
+    setPacientes([...pacientes, { nombreMascota, nombrePropietario, email, alta, sintomas, id: generateId() }]);
+    //Reiniciar el formulario
+    setNombreMascota('')
+    setNombrePropietario('')
+    setEmail('')
+    setAlta('')
+    setSintomas('')
   }
 
   return (
-    <div className='md:w-1/2 lg:w-2/5'>
+    <div className='md:w-1/2 lg:w-2/5 mx-5'>
       <h2 className='font-black text-3xl text-center'>Seguimiento de Pacientes</h2>
       <p className='text-lg mt-5 text-center mb-10'>
         Añade Pacientes y {''}
         <span className='text-indigo-600 font-bold'>Adminístralos</span>
       </p>
-      <form className='bg-white shadow-md rounded-lg py-10 px-5' onSubmit={handleSubmit}>
+      <form className='bg-white shadow-md rounded-lg py-10 px-5 mb-10' onSubmit={handleSubmit}>
         <div className='mt-5'>
           <label className='block text-gray-700 uppercase font-bold' htmlFor="nombreMascota">Nombre Mascota</label>
           <input id='nombreMascota' type="text" placeholder='Nombre de la Mascota'
@@ -45,7 +56,7 @@ function Formulario() {
             value={nombreMascota}
             onChange={(e) => setNombreMascota(e.target.value)}
             onKeyUp={(e) => setError({ ...error, nombreMascota: customError('Nombre Mascota', e.target.value, FormGroup.nombreMascota.validations) })} />
-          <div className='text-red-600'>{error['nombreMascota']}</div>
+          <Error mensaje={error['nombreMascota']} />
         </div>
         <div className='mt-5'>
           <label className='block text-gray-700 uppercase font-bold' htmlFor="nombrePropietario">Nombre del Propietario</label>
@@ -54,7 +65,7 @@ function Formulario() {
             value={nombrePropietario}
             onChange={(e) => setNombrePropietario(e.target.value)}
             onKeyUp={(e) => setError({ ...error, nombrePropietario: customError('Nombre del Propietario', e.target.value, FormGroup.nombrePropietario.validations) })} />
-          <div className='text-red-600'>{error['nombrePropietario']}</div>
+          <Error mensaje={error['nombrePropietario']} />
         </div>
         <div className='mt-5'>
           <label className='block text-gray-700 uppercase font-bold' htmlFor="email">Correo Electrónico</label>
@@ -63,7 +74,7 @@ function Formulario() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             onKeyUp={(e) => setError({ ...error, email: customError('Correo Electrónico', e.target.value, FormGroup.email.validations) })} />
-          <div className='text-red-600'>{error['email']}</div>
+          <Error mensaje={error['email']} />
         </div>
         <div className='mt-5'>
           <label className='block text-gray-700 uppercase font-bold' htmlFor="alta">Fecha de Alta</label>
@@ -72,7 +83,7 @@ function Formulario() {
             value={alta}
             onChange={(e) => setAlta(e.target.value)}
             onKeyUp={(e) => setError({ ...error, alta: customError('Fecha de Alta', e.target.value, FormGroup.alta.validations) })} />
-          <div className='text-red-600'>{error['alta']}</div>
+          <Error mensaje={error['alta']} />
         </div>
         <div className='mt-5'>
           <label className='block text-gray-700 uppercase font-bold' htmlFor="sintomas">Síntomas</label>
@@ -82,7 +93,7 @@ function Formulario() {
             value={sintomas}
             onChange={(e) => setSintomas(e.target.value)}
             onKeyUp={(e) => setError({ ...error, sintomas: customError('Síntomas', e.target.value, FormGroup.sintomas.validations) })} />
-          <div className='text-red-600'>{error['sintomas']}</div>
+          <Error mensaje={error['sintomas']} />
         </div>
         <input type="submit"
           className='bg-indigo-600 w-full p-3 mt-3 text-white uppercase font-bold hover:bg-indigo-800 cursor-pointer transition-all'
