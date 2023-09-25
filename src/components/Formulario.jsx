@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import customError from '../helpers/errors'
 import generateId from "../utils/generateId";
 
-function Formulario({ pacientes, setPacientes }) {
+function Formulario({ pacientes, setPacientes, paciente }) {
   const [nombreMascota, setNombreMascota] = useState('');
   const [nombrePropietario, setNombrePropietario] = useState('');
   const [email, setEmail] = useState('');
@@ -11,6 +11,11 @@ function Formulario({ pacientes, setPacientes }) {
   const [sintomas, setSintomas] = useState('');
 
   const [error, setError] = useState({ nombreMascota: '', nombrePropietario: '', email: '', alta: '', sintomas: '' })
+
+  useEffect(() => {
+    console.log(paciente)
+  }, [paciente])
+
 
   const [invalidForm, setInvalidForm] = useState(false);
 

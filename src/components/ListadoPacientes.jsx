@@ -1,8 +1,8 @@
 import Paciente from '../components/Paciente'
 
-function ListadoPacientes({ pacientes }) {
+function ListadoPacientes({ pacientes, setPaciente }) {
   return (
-    <div className='md:w-1/2 lg:w-3/5 mx-5'>
+    <div className='md:w-1/2 lg:w-3/5 mx-5 mb-10'>
       <h2 className='font-black text-3xl text-center'>Listado de Pacientes</h2>
       <p className='text-xl mt-5 mb-10 text-center'>
         Administra tus {''}
@@ -10,10 +10,10 @@ function ListadoPacientes({ pacientes }) {
           Pacientes y Citas
         </span>
       </p>
-      <div className='mt-20 mx-5 px-5 pt-5 pb-10 bg-white shadow-md rounded-xl md:h-screen overflow-y-scroll'>
+      <div className={`mx-5 px-5 pt-5 pb-10 bg-white shadow-md rounded-xl  ${pacientes && pacientes.length > 2 ? 'md:h-screen overflow-y-scroll' : ''}  `}>
         {pacientes && pacientes.length
           ?
-          <>{pacientes.map(paciente => (<Paciente key={paciente.id} paciente={paciente} />))}</>
+          <>{pacientes.map(paciente => (<Paciente key={paciente.id} paciente={paciente} setPaciente={setPaciente} />))}</>
           :
           <><h2 className='font-black text-3xl text-center'>Aún no hay pacientes</h2>
             <p className='text-xl mt-5 mb-10 text-center'>
