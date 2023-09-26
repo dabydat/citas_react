@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import customError from '../helpers/errors'
 import generateId from "../utils/generateId";
 
-function Formulario({ pacientes, setPacientes, paciente }) {
+function Formulario({ pacientes, setPacientes, paciente, setPaciente }) {
   const [nombreMascota, setNombreMascota] = useState('');
   const [nombrePropietario, setNombrePropietario] = useState('');
   const [email, setEmail] = useState('');
@@ -13,7 +13,13 @@ function Formulario({ pacientes, setPacientes, paciente }) {
   const [error, setError] = useState({ nombreMascota: '', nombrePropietario: '', email: '', alta: '', sintomas: '' })
 
   useEffect(() => {
-    console.log(paciente)
+    if (Object.keys(paciente).length > 0) {
+      setNombreMascota(paciente.nombreMascota)
+      setNombrePropietario(paciente.nombrePropietario)
+      setEmail(paciente.email)
+      setAlta(paciente.alta)
+      setSintomas(paciente.sintomas)
+    }
   }, [paciente])
 
 
@@ -35,9 +41,20 @@ function Formulario({ pacientes, setPacientes, paciente }) {
       setInvalidForm(true);
       return;
     }
-
     setInvalidForm(false);
-    setPacientes([...pacientes, { nombreMascota, nombrePropietario, email, alta, sintomas, id: generateId() }]);
+    const objectPaciente = { nombreMascota, nombrePropietario, email, alta, sintomas };
+    if (paciente.id) {
+      objectPaciente.id = paciente.id;
+      const pacientesActualizados = pacientes.map(pacienteState => pacienteState.id === paciente.id ? objectPaciente : pacienteState);
+      setPacientes(pacientesActualizados);
+      setPaciente({})
+    } else {
+      objectPaciente.id = generateId();
+      setPacientes([...pacientes, objectPaciente]);
+    }
+
+
+
     //Reiniciar el formulario
     setNombreMascota('')
     setNombrePropietario('')
@@ -102,7 +119,7 @@ function Formulario({ pacientes, setPacientes, paciente }) {
         </div>
         <input type="submit"
           className='bg-indigo-600 w-full p-3 mt-3 text-white uppercase font-bold hover:bg-indigo-800 cursor-pointer transition-all'
-          value="Agregar Paciente" />
+          value={paciente.id ? 'Editar Paciente' : 'Agregar Paciente'} />
       </form>
     </div>
   )
